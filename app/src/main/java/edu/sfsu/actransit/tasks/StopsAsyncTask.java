@@ -1,5 +1,6 @@
 package edu.sfsu.actransit.tasks;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -31,6 +32,8 @@ import edu.sfsu.actransit.models.StopsModel;
 public class StopsAsyncTask extends AsyncTask<String, Integer, String> {
     private Context context;
     ProgressBar progressBar;
+
+    ProgressDialog progressDialog;
     RecyclerView recyclerView;
     private final ArrayList<StopsModel> model;
 
@@ -39,6 +42,21 @@ public class StopsAsyncTask extends AsyncTask<String, Integer, String> {
         this.model = model;
         this.progressBar = progressBar;
         this.recyclerView = recyclerView;
+    }
+
+    /* onPreExecute()
+     * Runs on the UI thread before doInBackground(Params).
+     * Invoked directly by execute(Params) or executeOnExecutor(Executor, Params).
+     * The default version does nothing. This method must be called from the main thread of your app.
+     * */
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog =  new ProgressDialog(context);
+        progressDialog.setMessage("Downloading...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
     }
 
     @Override
